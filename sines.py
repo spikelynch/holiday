@@ -17,9 +17,9 @@ RMULT = 2
 BMULT = 3
 GMULT = 5
 
-RV = 0.122
+RV = 0.522
 BV = -.3
-GV = .435
+GV = .735
 
 RON = 1
 GON = 1

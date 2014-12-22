@@ -23,9 +23,9 @@ def rgbtoholiday(r, g, b):
     return ( toholiday(r), toholiday(g), toholiday(b) )
 
 
-SIZE = 3
+SIZE = 2
 LIMIT = 50
-SPEED = 2.3
+SPEED = 0.5
 
 class Drop:
     def __init__(self):

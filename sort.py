@@ -101,6 +101,7 @@ class Sorterapp(threading.Thread):
         self.makelerp()
         sorter = Quicksorter(list, lambda l, c: self.render(l, c))
         sorter.sort()
+        self.render(list, -1)
 
     def render(self, list, cursor):
         i = 0
@@ -108,6 +109,8 @@ class Sorterapp(threading.Thread):
             ( r, g, b ) = self.lerp(l)
             self.holiday.setglobe(i, int(r * 63), int(g * 63), int(b * 63))
             i += 1
+        if cursor > -1:
+            self.holiday.setglobe(cursor, 0, 0, 0)
         self.holiday.render()
         time.sleep(0.2)
 

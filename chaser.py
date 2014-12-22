@@ -39,18 +39,20 @@ def mkgradient(r1, g1, b1, r2, g2, b2, n):
         
 # white to green to white to red to white
 
-# g1 = mkgradient(1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 8) 
-# g2 = mkgradient(0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 8) 
-# g3 = mkgradient(1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 8) 
-# g4 = mkgradient(1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 8) 
+g1 = mkgradient(1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 8) 
+g2 = mkgradient(0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 8) 
+g3 = mkgradient(1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 8) 
+g4 = mkgradient(1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 8) 
 
 chrimbo = [ (63, 63, 63), (63, 63, 63), (63, 0, 0), (63, 0, 0), (0, 63, 0), (0, 63, 0) ]
+
+chrimbo_gradient = g1 + g2 + g3 + g4
 
 r2y = mkgradient(1, 0, 0, 1, 1, 0, 50)
 y2b = mkgradient(1, 1, 0, 0, 0, 1, 50)
 b2r = mkgradient(0, 0, 1, 1, 0, 0, 50)
 
-pattern = b2r
+pattern = chrimbo
 
 print pattern
 #print y2b
