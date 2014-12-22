@@ -5,7 +5,47 @@ from random import shuffle
 import sys, time, threading, random, colorsys
 from holidaysecretapi import HolidaySecretAPI 
 
-COLOURS = [ (1, 0, 0), (0, 1, 0), (0, 0, 1), (1, 1, 0), (1, 0, 1), (0, 1, 1) ]
+COLOURS = [ (1, 0, 0), (0, 1, 0), (0, 0, 1), ( 1, 1, 0 ), ( 1, 0, 1), ( 0, 1, 1 ) ]
+
+
+def rgbtoholiday(r, g, b):
+    return ( toholiday(r), toholiday(g), toholiday(b) )
+
+def toholiday(f):
+    return int(63 * f)
+
+
+def lerp(a1, a2, k):
+    return a1 + (a2 - a1) * k
+
+ 
+
+
+# note that the HSV-isation leads to very counterintuitive gradients
+
+def mkgradient(c1, c2, n):
+    gradient = []
+    ( h1, s1, v1 ) = colorsys.rgb_to_hsv(*c1)
+    ( h2, s2, v2 ) = colorsys.rgb_to_hsv(*c2)
+    fn = float(n)
+    for i in range(n):
+        k = i / fn
+        h = lerp(h1, h2, k)
+        s = lerp(s1, s2, k)
+        v = lerp(v1, v2, k)
+        ( r, g, b ) = colorsys.hsv_to_rgb(h, s, v)
+        gradient.append(rgbtoholiday(r, g, b))
+    return gradient
+
+
+
+
+
+
+
+
+
+
 
 class Quicksorter:
     def __init__(self, init, renderer):
@@ -69,15 +109,7 @@ def printrender(list, cursor):
     print out
 
 
-def lerp(a1, a2, k):
-    return a1 + (a2 - a1) * k
-    
 
-def lerpcolour(c1, c2, i):
-    (r1, g1, b1) = c1
-    (r2, g2, b2) = c2
-    j = i * 0.02
-    return ( lerp(r1, r2, j), lerp(g1, g2, j), lerp(b1, b2, j) )
 
 
 
@@ -98,7 +130,7 @@ class Sorterapp(threading.Thread):
     def runsort(self):
         list = range(0, 50)
         shuffle(list)
-        self.makelerp()
+        self.makegradient()
         sorter = Quicksorter(list, lambda l, c: self.render(l, c))
         sorter.sort()
         self.render(list, -1)
@@ -106,18 +138,18 @@ class Sorterapp(threading.Thread):
     def render(self, list, cursor):
         i = 0
         for l in list:
-            ( r, g, b ) = self.lerp(l)
-            self.holiday.setglobe(i, int(r * 63), int(g * 63), int(b * 63))
+            ( r, g, b ) = self.gradient(l)
+            self.holiday.setglobe(i, r, g, b)
             i += 1
         if cursor > -1:
             self.holiday.setglobe(cursor, 0, 0, 0)
         self.holiday.render()
         time.sleep(0.2)
 
-    def makelerp(self):
+    def makegradient(self):
         c = random.sample(COLOURS, 2)
-        self.lerp = lambda i: lerpcolour(c[0], c[1], i)
-
+        self.grvalues = mkgradient(c[0], c[1], 50)
+        self.gradient = lambda i: self.grvalues[i]
 
 
 
