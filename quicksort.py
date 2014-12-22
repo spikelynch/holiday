@@ -7,6 +7,9 @@ from holidaysecretapi import HolidaySecretAPI
 
 COLOURS = [ (1, 0, 0), (0, 1, 0), (0, 0, 1), ( 1, 1, 0 ), ( 1, 0, 1), ( 0, 1, 1 ) ]
 
+# WAIT: the sleep time in seconds between steps.
+
+WAIT = 0.1
 
 def rgbtoholiday(r, g, b):
     return ( toholiday(r), toholiday(g), toholiday(b) )
@@ -144,7 +147,7 @@ class Sorterapp(threading.Thread):
         if cursor > -1:
             self.holiday.setglobe(cursor, 0, 0, 0)
         self.holiday.render()
-        time.sleep(0.2)
+        time.sleep(WAIT)
 
     def makegradient(self):
         c = random.sample(COLOURS, 2)
