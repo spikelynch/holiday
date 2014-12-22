@@ -13,6 +13,7 @@ Scripts:
 * quicksort.py - The nerdiest lights! A visualisation of the quicksort algorithm
 * what_colour_is_it.py - Displays the current time as a hex-colour triplet, after [this website](http://whatcolourisit.scn9a.org/)
 
-For these to work, your Holiday needs to be on your local wifi, and its IP address should be passed to the script as a command-line argument. EG:
+For these to work, your Holiday needs to be on your local wifi, and its IP address should be passed to the script as a command-line argument. eg:
 
   chaser.py 10.1.1.9
+
