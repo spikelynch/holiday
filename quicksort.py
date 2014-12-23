@@ -24,30 +24,6 @@ def lerp(a1, a2, k):
  
 
 
-# note that the HSV-isation leads to very counterintuitive gradients
-
-def mkgradient(c1, c2, n):
-    gradient = []
-    ( h1, s1, v1 ) = colorsys.rgb_to_hsv(*c1)
-    ( h2, s2, v2 ) = colorsys.rgb_to_hsv(*c2)
-    fn = float(n)
-    for i in range(n):
-        k = i / fn
-        h = lerp(h1, h2, k)
-        s = lerp(s1, s2, k)
-        v = lerp(v1, v2, k)
-        ( r, g, b ) = colorsys.hsv_to_rgb(h, s, v)
-        gradient.append(rgbtoholiday(r, g, b))
-    return gradient
-
-
-
-
-
-
-
-
-
 
 
 class Quicksorter:
@@ -131,7 +107,7 @@ class Sorterapp(threading.Thread):
             time.sleep(1)
 
     def runsort(self):
-        list = range(0, 50)
+        list = range(self.holiday.NUM_GLOBES)
         shuffle(list)
         self.makegradient()
         sorter = Quicksorter(list, lambda l, c: self.render(l, c))
@@ -150,8 +126,24 @@ class Sorterapp(threading.Thread):
         time.sleep(WAIT)
 
     def makegradient(self):
-        c = random.sample(COLOURS, 2)
-        self.grvalues = mkgradient(c[0], c[1], 50)
+        #c = random.sample(COLOURS, 2)
+        self.grvalues = []
+        h1 = random.random()
+        h2 = h1 + .5 + random.uniform(-.25, .25)
+        if h2 > 1:
+            h2 -= 1
+        s1 = random.uniform(.5, 1)
+        s2 = random.uniform(.5, 1)
+        n = self.holiday.NUM_GLOBES
+        fn = float(n)
+        
+        for i in range(n):
+            k = i / fn
+            h = lerp(h1, h2, k)
+            s = lerp(s1, s2, k)
+            ( r, g, b ) = colorsys.hsv_to_rgb(h, s, 1)
+            self.grvalues.append(rgbtoholiday(r, g, b))
+        
         self.gradient = lambda i: self.grvalues[i]
 
 
