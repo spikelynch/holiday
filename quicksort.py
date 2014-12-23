@@ -11,6 +11,8 @@ COLOURS = [ (1, 0, 0), (0, 1, 0), (0, 0, 1), ( 1, 1, 0 ), ( 1, 0, 1), ( 0, 1, 1 
 
 WAIT = 0.1
 
+CURSOR = ( 63, 0, 0 )
+
 def rgbtoholiday(r, g, b):
     return ( toholiday(r), toholiday(g), toholiday(b) )
 
@@ -121,7 +123,7 @@ class Sorterapp(threading.Thread):
             self.holiday.setglobe(i, r, g, b)
             i += 1
         if cursor > -1:
-            self.holiday.setglobe(cursor, 0, 0, 0)
+            self.holiday.setglobe(cursor, *CURSOR)
         self.holiday.render()
         time.sleep(WAIT)
 
