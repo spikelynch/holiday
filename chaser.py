@@ -80,8 +80,6 @@ class Chaserapp(threading.Thread):
 
 
 
-# ZOMFG LET'S DO SOME TESTING
-#
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         addr = sys.argv[1]          # Pass IP address of Holiday on command line
