@@ -80,19 +80,70 @@ class Quicksorter:
         self.qsort(0, len(self.list) - 1)
         return self.list
 
-def printrender(list, cursor):
-    out = ""
-    for i in range(len(list)):
-        if i == cursor:
-            out += "[" + str(list[i]) + "] "
+
+class Mergesorter:
+    def __init__(self, init, renderer):
+        self.list = init
+        self.renderer = renderer
+
+    def render(self, cursor):
+        self.renderer(self.list, cursor)
+
+    def sort(self):
+        self.mergesort(0, len(self.list) - 1)
+        return self.list
+
+    def mergesort(self, start, end):
+        print "Mergesort", start, end
+        if start == end:
+            print "one-element list"
+            return
+        mid = (start + end) / 2
+        self.mergesort(start, mid)
+        self.mergesort(mid + 1, end)
+        self.merge(start, mid, end)
+        self.render(mid)
+
+    def merge(self, start, mid, end):
+        print "Merging ", start, mid, end
+        left = self.list[start:mid]
+        right = self.list[mid:(end + 1)]
+        m = []
+        print left, right
+        while left and right:
+            if left[0] <= right[0]:
+                print left[0], "<=", right[0]
+                m.append(left.pop(0))
+            else:
+                print left[0], ">", right[0]
+                m.append(right.pop(0))
+        if left:
+            m.extend(left)
         else:
-            out += str(list[i]) + " "
-    print out
+            m.extend(right)
+        print left, right, m
+        for i in range(start, end):
+            self.list[i] = m.pop(0)
 
 
 
+    def shift(self, i, j):
+        print "Shift ", i, j
+        move = self.list[j]
+        r = range(j, i - 1, -1)
+        if r:
+            self.render(i)
+            print "range = ", r
+            for k in r:
+                self.list[k] = self.list[k - 1]
+            self.list[i] = move
+        else:
+            print "Null range i =", i, " j =", j
+        print "After"
+        self.render(i)
 
 
+            
 
 
 class Sorterapp(threading.Thread):
@@ -149,19 +200,39 @@ class Sorterapp(threading.Thread):
         self.gradient = lambda i: self.grvalues[i]
 
 
+def printrender(list, cursor):
+    out = ""
+    for i in range(len(list)):
+        if i == cursor:
+            out += "[" + str(list[i]) + "] "
+        else:
+            out += str(list[i]) + " "
+    print out
+
+
+def testsort():
+    list = range(13)
+    shuffle(list)
+    sorter = Mergesorter(list, printrender)
+    printrender(list, -1)
+    sorter.sort()
+    printrender(list, -1)
+
+
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         addr = sys.argv[1]          # Pass IP address of Holiday on command line
+        app = Sorterapp()           # Instance thread & start it
+        app.start()
+        while True:
+            try:
+                time.sleep(0.1)
+            except KeyboardInterrupt:
+                app.terminate = True
+                sys.exit(0)
     else:
-        sys.exit(1)                 # If not there, fail
+        testsort()
 
-    app = Sorterapp()               # Instance thread & start it
-    app.start()
-    while True:
-        try:
-            time.sleep(0.1)
-        except KeyboardInterrupt:
-            app.terminate = True
-            sys.exit(0)
 
