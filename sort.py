@@ -90,57 +90,39 @@ class Mergesorter:
         self.renderer(self.list, cursor)
 
     def sort(self):
-        self.mergesort(0, len(self.list) - 1)
+        self.mergesort(0, len(self.list))
         return self.list
 
     def mergesort(self, start, end):
-        print "Mergesort", start, end
-        if start == end:
-            print "one-element list"
+        if start == end - 1:
             return
         mid = (start + end) / 2
         self.mergesort(start, mid)
-        self.mergesort(mid + 1, end)
+        self.mergesort(mid, end)
         self.merge(start, mid, end)
         self.render(mid)
 
     def merge(self, start, mid, end):
-        print "Merging ", start, mid, end
         left = self.list[start:mid]
-        right = self.list[mid:(end + 1)]
-        m = []
-        print left, right
+        right = self.list[mid:end]
+        if not ( left and right ):
+            print "Error: empty list(s)", left, right
+            exit(0)
+        merged = []
         while left and right:
             if left[0] <= right[0]:
-                print left[0], "<=", right[0]
-                m.append(left.pop(0))
+                merged.append(left.pop(0))
             else:
-                print left[0], ">", right[0]
-                m.append(right.pop(0))
+                merged.append(right.pop(0))
         if left:
-            m.extend(left)
+            merged.extend(left)
         else:
-            m.extend(right)
-        print left, right, m
+            merged.extend(right)
         for i in range(start, end):
-            self.list[i] = m.pop(0)
+            v = merged.pop(0)
+            self.list[i] = v
 
 
-
-    def shift(self, i, j):
-        print "Shift ", i, j
-        move = self.list[j]
-        r = range(j, i - 1, -1)
-        if r:
-            self.render(i)
-            print "range = ", r
-            for k in r:
-                self.list[k] = self.list[k - 1]
-            self.list[i] = move
-        else:
-            print "Null range i =", i, " j =", j
-        print "After"
-        self.render(i)
 
 
             
