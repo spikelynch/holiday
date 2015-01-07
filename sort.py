@@ -9,7 +9,7 @@ COLOURS = [ (1, 0, 0), (0, 1, 0), (0, 0, 1), ( 1, 1, 0 ), ( 1, 0, 1), ( 0, 1, 1 
 
 # WAIT: the sleep time in seconds between steps.
 
-TEST_LENGTH = 125
+TEST_LENGTH = 25
 
 WAIT = 0.1
 
@@ -25,6 +25,29 @@ def toholiday(f):
 def lerp(a1, a2, k):
     return a1 + (a2 - a1) * k
 
+
+
+class Bubblesorter:
+    def __init__(self, init, renderer):
+        self.list = init
+        self.renderer = renderer
+
+    def render(self, cursor):
+        self.renderer(self.list, cursor)
+
+    def sort(self):
+        while self.bubble():
+            pass
+
+    def bubble(self):
+        swapped = False
+        for i in range(1, len(self.list)):
+            if self.list[i] < self.list[i - 1]:
+                self.list.insert(i - 1, self.list.pop(i))
+                swapped = True
+                self.render(i)
+        return swapped
+        
 
 
 class Insertsorter:
@@ -175,7 +198,7 @@ class Sorterapp(threading.Thread):
         self.render(list, -1)
 
     def makesorter(self, list):
-        sorterc = random.choice([Insertsorter, Quicksorter, Mergesorter])
+        sorterc = random.choice([Bubblesorter, Insertsorter, Quicksorter, Mergesorter])
         print "Sort algorithm: ", sorterc
         sorter = sorterc(list, lambda l, c: self.render(l, c))
         return sorter
@@ -226,7 +249,7 @@ def printrender(list, cursor):
 def testsort():
     list = range(TEST_LENGTH)
     shuffle(list)
-    sorter = Insertionsorter(list, printrender)
+    sorter = Bubblesorter(list, printrender)
     printrender(list, -1)
     sorter.sort()
     printrender(list, -1)
