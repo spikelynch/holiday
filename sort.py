@@ -9,6 +9,8 @@ COLOURS = [ (1, 0, 0), (0, 1, 0), (0, 0, 1), ( 1, 1, 0 ), ( 1, 0, 1), ( 0, 1, 1 
 
 # WAIT: the sleep time in seconds between steps.
 
+TEST_LENGTH = 125
+
 WAIT = 0.1
 
 CURSOR = ( 63, 0, 0 )
@@ -23,9 +25,31 @@ def toholiday(f):
 def lerp(a1, a2, k):
     return a1 + (a2 - a1) * k
 
- 
 
 
+class Insertsorter:
+    def __init__(self, init, renderer):
+        self.list = init
+        self.renderer = renderer
+
+    def render(self, cursor):
+        self.renderer(self.list, cursor)
+
+    def sort(self):
+        for i in range(0, len(self.list)):
+            self.insert(i)
+
+    def insert(self, i):
+        j = i - 1
+        while j > -1:
+            if self.list[i] >= self.list[j]:
+                break
+            j -= 1
+        if i != j + 1:
+            self.render(i)
+            self.list.insert(j + 1, self.list.pop(i))
+            self.render(j)
+        
 
 
 class Quicksorter:
@@ -100,27 +124,28 @@ class Mergesorter:
         self.mergesort(start, mid)
         self.mergesort(mid, end)
         self.merge(start, mid, end)
-        self.render(mid)
+        #self.render(mid)
 
     def merge(self, start, mid, end):
+        self.render(mid)
         left = self.list[start:mid]
         right = self.list[mid:end]
         if not ( left and right ):
             print "Error: empty list(s)", left, right
             exit(0)
-        merged = []
+        i = start
         while left and right:
             if left[0] <= right[0]:
-                merged.append(left.pop(0))
+                self.list[i] = left.pop(0)
             else:
-                merged.append(right.pop(0))
-        if left:
-            merged.extend(left)
-        else:
-            merged.extend(right)
-        for i in range(start, end):
-            v = merged.pop(0)
-            self.list[i] = v
+                self.list[i] = right.pop(0)
+            i += 1
+        while left:
+            self.list[i] = left.pop(0)
+            i += 1
+        while right:
+            self.list[i] = right.pop(0)
+            i += 1
 
 
 
@@ -145,9 +170,15 @@ class Sorterapp(threading.Thread):
         list = range(self.holiday.NUM_GLOBES)
         shuffle(list)
         self.makegradient()
-        sorter = Quicksorter(list, lambda l, c: self.render(l, c))
+        sorter = self.makesorter(list)
         sorter.sort()
         self.render(list, -1)
+
+    def makesorter(self, list):
+        sorterc = random.choice([Insertsorter, Quicksorter, Mergesorter])
+        print "Sort algorithm: ", sorterc
+        sorter = sorterc(list, lambda l, c: self.render(l, c))
+        return sorter
 
     def render(self, list, cursor):
         i = 0
@@ -193,9 +224,9 @@ def printrender(list, cursor):
 
 
 def testsort():
-    list = range(13)
+    list = range(TEST_LENGTH)
     shuffle(list)
-    sorter = Mergesorter(list, printrender)
+    sorter = Insertionsorter(list, printrender)
     printrender(list, -1)
     sorter.sort()
     printrender(list, -1)
