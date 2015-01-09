@@ -14,6 +14,7 @@ from Queue import Queue
 from holidaysecretapi import HolidaySecretAPI 
 
 HOLIDAY_LENGTH = 50
+THRESHHOLD = 10
 
 class Pulse:
     """
@@ -36,22 +37,23 @@ class Pulse:
         """Move this pulse by velocity and deactivate it if it's out"""
         self.position += self.velocity
         if self.velocity < 0:
-            if self.position + self.length < 0:
+            if self.position + self.length < -THRESHHOLD:
                 self.active = False
         else:
-            if self.position - self.length > HOLIDAY_LENGTH:
+            if self.position - self.length > HOLIDAY_LENGTH + THRESHHOLD:
                 self.active = False
 
     def colours(self, i):
         """Return a tuple of this pulse's contribution to light i"""
+        s = 1
         if self.velocity < 0:
-            return ( 0, 0, 0 )
-        gi = [ g for g in range(self.length) if 0 < self.position - g - i < 2 ]
+            s = -1
+        gi = [ g for g in range(self.length) if 0 < self.position - s * g - i < 2 ]
         r1 = 0.0
         b1 = 0.0
         g1 = 0.0
         for g in gi:
-            p = self.position - g - i
+            p = self.position - s * g - i
             ( r0, g0, b0 ) = self.gradient[g]
             if p > 1:
                 p = 2 - p
@@ -115,7 +117,7 @@ class Pulser(Thread):
             time.sleep(.05)       
 
 
-def randcolour(v):
+def random_colour(v):
     h = random.uniform(0, 1)
     return colorsys.hsv_to_rgb(h, 1, v)
 
@@ -136,13 +138,15 @@ if __name__ == '__main__':
     while True:
         try:
             time.sleep(1)
-            if len(pulser.pulses) < 3:
-                c = randcolour(1)
-                l = random.randint(3, 6)
-                v = random.uniform(.01, .5)
-                i = 0
-                p = Pulse(i, v, [ c ] * l)
-                q.put(p)
+            c = random_colour(1)
+            l = random.randint(1, 6)
+            i = 0
+            v = random.uniform(0.01, 3.0)
+            if random.randint(0, 1):
+                i = 52
+                v = -v
+            p = Pulse(i, v, [c] * l)
+            q.put(p)
         except KeyboardInterrupt:
             pulser.terminate = True
             sys.exit(0)
