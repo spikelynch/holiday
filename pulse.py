@@ -44,28 +44,21 @@ class Pulse:
 
     def colours(self, i):
         """Return a tuple of this pulse's contribution to light i"""
-        sense = 1
         if self.velocity < 0:
-            sense = -1
-        offset = sense * (self.position - i)
-        g1 = int(offset)
-        p1 = 1 - (offset - g1)
-        g2 = g1 + 1
-        p2 = 1 - p1
-        r = 0.0
-        b = 0.0
-        g = 0.0
-        if p1 > 0 and (g1 > -1 and g1 < self.length):
-            ( r1, g1, b1 ) = self.gradient[g1]
-            r += r1 * p1
-            g += g1 * p1
-            b += b1 * p1
-        if p2 > 0 and (g2 > -1 and g2 < self.length):
-            ( r2, g2, b2 ) = self.gradient[g2]
-            r += r2 * p2
-            g += g2 * p2
-            b += b2 * p2
-        return (r, g, b)
+            return ( 0, 0, 0 )
+        gi = [ g for g in range(self.length) if 0 < self.position - g - i < 2 ]
+        r1 = 0.0
+        b1 = 0.0
+        g1 = 0.0
+        for g in gi:
+            p = self.position - g - i
+            ( r0, g0, b0 ) = self.gradient[g]
+            if p > 1:
+                p = 2 - p
+            r1 += r0 * p
+            g1 += g0 * p
+            b1 += b0 * p
+        return (r1, g1, b1)
 
 def toholiday(f):
     if f > 1:
@@ -142,17 +135,14 @@ if __name__ == '__main__':
 
     while True:
         try:
-            time.sleep(.6)
-            c = randcolour(1)
-            l = random.randint(1, 6)
-            v = random.uniform(0.2, 2.5)
-            if random.randint(0,1) == 0:
+            time.sleep(1)
+            if len(pulser.pulses) < 3:
+                c = randcolour(1)
+                l = random.randint(3, 6)
+                v = random.uniform(.01, .5)
                 i = 0
-            else:
-                i = 50
-                v = -v
-            p = Pulse(i, v, [ c ] * l)
-            q.put(p)
+                p = Pulse(i, v, [ c ] * l)
+                q.put(p)
         except KeyboardInterrupt:
             pulser.terminate = True
             sys.exit(0)
