@@ -13,13 +13,35 @@ from holidaysecretapi import HolidaySecretAPI
 
 
 SINELENGTH = 400
+
+# standard
+
+# RMULT = 2
+# BMULT = 3
+# GMULT = 5
+
+#RV = 0.522
+#BV = -.3
+#GV = .735
+
+
 RMULT = 2
 BMULT = 3
 GMULT = 5
 
-RV = 0.522
-BV = -.3
-GV = .735
+RV = .2
+BV = .3
+GV = .5
+
+# redshift
+
+# RMULT = 2
+# BMULT = 2
+# GMULT = 2
+
+# RV = .5
+# GV = .51
+# BV = .52
 
 RON = 1
 GON = 1
