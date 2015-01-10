@@ -11,7 +11,8 @@ COLOURS = [ (1, 0, 0), (0, 1, 0), (0, 0, 1), ( 1, 1, 0 ), ( 1, 0, 1), ( 0, 1, 1 
 
 TEST_LENGTH = 25
 
-WAIT = 0.1
+SLEEP_BETWEEN = 2
+WAIT = 0.5
 
 CURSOR = ( 63, 0, 0 )
 
@@ -41,11 +42,13 @@ class Bubblesorter:
 
     def bubble(self):
         swapped = False
+        top = -1
         for i in range(1, len(self.list)):
             if self.list[i] < self.list[i - 1]:
                 self.list.insert(i - 1, self.list.pop(i))
                 swapped = True
-                self.render(i)
+                top = i
+        self.render(top)
         return swapped
         
 
@@ -69,7 +72,6 @@ class Insertsorter:
                 break
             j -= 1
         if i != j + 1:
-            self.render(i)
             self.list.insert(j + 1, self.list.pop(i))
             self.render(j)
         
@@ -183,11 +185,13 @@ class Sorterapp(threading.Thread):
         global addr
         self.terminate = False
         self.holiday = HolidaySecretAPI(addr=addr)
+        self.s = 0
+        self.sorters = [Bubblesorter, Insertsorter, Mergesorter, Quicksorter ]
         while True:
             if self.terminate:
                 return
             self.runsort()
-            time.sleep(1)
+            time.sleep(SLEEP_BETWEEN)
 
     def runsort(self):
         list = range(self.holiday.NUM_GLOBES)
@@ -198,8 +202,11 @@ class Sorterapp(threading.Thread):
         self.render(list, -1)
 
     def makesorter(self, list):
-        sorterc = random.choice([Bubblesorter, Insertsorter, Quicksorter, Mergesorter])
-        print "Sort algorithm: ", sorterc
+        sorterc = self.sorters[self.s]
+        self.s += 1
+        if self.s == len(self.sorters):
+            self.s = 0
+        print "Algorithm: ", sorterc
         sorter = sorterc(list, lambda l, c: self.render(l, c))
         return sorter
 
