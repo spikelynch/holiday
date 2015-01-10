@@ -8,6 +8,7 @@ import string
 import colorsys
 import random
 import math
+import pulse
 from threading import Thread
 
 import pcapy
@@ -18,138 +19,36 @@ from impacket.ImpactDecoder import EthDecoder, LinuxSLLDecoder
 import Queue
 from holidaysecretapi import HolidaySecretAPI 
 
+DEVICE_COLOURS = {
+    '2' : 180,
+    '3' : 46,
+    '4' : 230,
+    '5' : 161,
+    '6' : 230,
+    '7' : 297,
+    '8' : 23,
+    '9' : 111,
+    '10' : 0,
+    '11' : 27
+}
 
-
-# Boring chaser -  move this to its own module...
-
-class Visqueue(Thread):
-    
-    def __init__(self, queue):
-        self.queue = queue
-        Thread.__init__(self)
-    
-    def run(self):
-        """Go"""
-        global addr
-        self.terminate = False
-        self.holiday = HolidaySecretAPI(addr=addr)
-        self.lights = [ (0, 0, 0) for i in range(self.holiday.NUM_GLOBES) ]
-        
-        while True:
-            if self.terminate:
-                return
-            # move all the lights
-            self.lights.pop(0)
-            if not self.queue.empty():
-                light = self.queue.get()
-            else:
-                light = ( 0, 0, 0 )
-            self.lights.append(light)
-            for i in range(self.holiday.NUM_GLOBES):
-                self.holiday.setglobe(i, *self.lights[i])
-            self.holiday.render() 
-            time.sleep(.01)      
+SPEED = .5
+SIZE = 3
+VALUE = .4
 
 
 
 def ip_to_rgb(ip):
     ipa = ip.split('.')
-    if len(ipa) > 2:
-        r = int(float(ipa[0]) * 0.25)
-        g = int(float(ipa[1]) * 0.25)
-        b = int(float(ipa[2]) * 0.25)
-        return (r, g, b)
-    else:
-        return (63, 63, 63)
+    if ipa:
+        last = ipa.pop()
+        if last in DEVICE_COLOURS:
+            return colorsys.hsv_to_rgb(DEVICE_COLOURS[last] / 360.0, 1, VALUE)
+    return colorsys.hsv_to_rgb(1, 0, VALUE)
 
-
-
-START_Y = -10.0
-END_Y = 10.0
-SPEED = 0.5
-SIZE = 8
-
-# More interesting drops which add together so get brighter as the
-# network gets busier
-
-def toholiday(f):
-    if f > 1:
-        return 63
-    else:
-        return int(63 * f)
-
-
-
-class Drop:
-    def __init__(self, col):
-        self.x = random.uniform(0.0, 50.0)
-        self.y = START_Y
-        ( r, g, b ) = col #  colorsys.hsv_to_rgb(hue, 1.0, 1.0)
-        self.r = r
-        self.g = g
-        self.b = b
-        self.active = True
-
-    def show(self):
-        print self.x, self.y
-
-    def move(self):
-        self.y += SPEED
-        if self.y > END_Y:
-            self.active = False
-
-    def brightness(self, x):
-        d = math.hypot(x - self.x, self.y)
-        p = 1.0 / (1.0 + d * SIZE)
-        return ( p * self.r, p * self.g, p * self.b )
-
-
-class Dropsapp(Thread):
-
-    def __init__(self, queue):
-        self.queue = queue
-        Thread.__init__(self)
-
-    def run(self):
-        """Go"""
-        global addr
-        self.terminate = False
-        self.holiday = HolidaySecretAPI(addr=addr)
-        self.n = 8
-        self.drops = []
-        while True:
-            if self.terminate:
-                return
-            for d in self.drops:
-                d.move()            
-            self.drops = [d for d in self.drops if d.active]
-
-            for i in range(self.holiday.NUM_GLOBES):
-                r = 0.0
-                b = 0.0
-                g = 0.0
-                for d in self.drops:
-                    ( r1, g1, b1 ) = d.brightness(i)
-                    r += r1
-                    g += g1
-                    b += b1
-                self.holiday.setglobe(i, toholiday(r), toholiday(g), toholiday(b))
-            self.holiday.render() 
-
-            if not self.queue.empty():
-                p = self.queue.get()
-                self.drops.append(Drop(p))
-
-            time.sleep(.01)       
-
-
-
-
-
-
-
-
-
+def size_to_length(s):
+    hex = "%x" % s
+    return len(hex)
 
 
 
@@ -186,15 +85,20 @@ class DecoderThread(Thread):
         try:
             value['proto'] = p.child().child().protocol
             protocol = value['proto']
-            value['size'] = p.get_size
+            value['size'] = p.get_size()
             value['src'] = p.child().get_ip_src()
             value['dest'] = p.child().get_ip_dst()
             if value['src'][0:2] == '10':
-                col = ip_to_rgb(value['dest'])
-            else:
                 col = ip_to_rgb(value['src'])
-            self.queue.put(col)
-            print "Packet " + value['src'] + " -> " + value['dest']
+                v = SPEED
+                i = 0
+            else:
+                col = ip_to_rgb(value['dest'])
+                v = -SPEED
+                i = 52
+            l = size_to_length(value['size'])
+            self.queue.put(pulse.Pulse(i, v, [ col ] * l))
+            print "Packet ", value['src'], " -> ", value['dest'], "Size ", value['size']
         except Exception, e:
             print "Decoding failed"
             print e
@@ -226,7 +130,7 @@ def getInterface():
 
     return ifs[idx]
 
-def main(filter):
+def main(ip, filter):
     dev = getInterface()
 
     # Open interface for catpuring.
@@ -240,19 +144,18 @@ def main(filter):
     q = Queue.Queue()
     
     # Start the holiday visualiser
-    #viz = Visqueue(q)
-    viz = Dropsapp(q)
-    viz.start()
+    pulses = pulse.Pulser(ip, q)
+    pulses.start()
 
     # Start sniffing thread and finish main thread.
     dt = DecoderThread(p, q)
     dt.start()
     while True:
         try:
-            time.sleep(0.5)
+            time.sleep(0.01)
         except KeyboardInterrupt:
             dt.terminate = True
-            viz.terminate = True
+            pulses.terminate = True
             sys.exit(0)
 
 
@@ -271,4 +174,4 @@ if __name__ == '__main__':
 
     filter = 'not host ' + addr
 
-    main(filter)
+    main(addr, filter)
