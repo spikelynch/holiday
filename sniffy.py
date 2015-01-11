@@ -22,9 +22,9 @@ from holidaysecretapi import HolidaySecretAPI
 DEVICE_COLOURS = {
     '2' : 180,
     '3' : 46,
-    '4' : 230,
+    '4' : 270,
     '5' : 161,
-    '6' : 230,
+    '6' : 270,
     '7' : 297,
     '8' : 23,
     '9' : 111,
@@ -32,7 +32,7 @@ DEVICE_COLOURS = {
     '11' : 27
 }
 
-SPEED = .5
+SPEED = 4
 SIZE = 3
 VALUE = .4
 
@@ -50,6 +50,11 @@ def size_to_length(s):
     hex = "%x" % s
     return len(hex)
 
+
+def make_pulse(col, l):
+    grad = [float(g)/l for g in range(l, 0, -1)]
+    (r, g, b) = col
+    return [ ( r * gr, g * gr, b * gr ) for gr in grad ]
 
 
 class DecoderThread(Thread):
@@ -77,29 +82,36 @@ class DecoderThread(Thread):
         # which drives the Holiday lights.
         try:
             p = self.decoder.decode(data)
-        except Exception, e:
-            print "Exception!"
-            print e 
+        except (Exception, KeyboardInterrupt) as e:
+            print e
             return
-        value = {}
         try:
-            value['proto'] = p.child().child().protocol
-            protocol = value['proto']
-            value['size'] = p.get_size()
-            value['src'] = p.child().get_ip_src()
-            value['dest'] = p.child().get_ip_dst()
-            if value['src'][0:2] == '10':
-                col = ip_to_rgb(value['src'])
-                v = SPEED
-                i = 0
-            else:
-                col = ip_to_rgb(value['dest'])
-                v = -SPEED
-                i = 52
-            l = size_to_length(value['size'])
-            self.queue.put(pulse.Pulse(i, v, [ col ] * l))
-            print "Packet ", value['src'], " -> ", value['dest'], "Size ", value['size']
-        except Exception, e:
+            protocol = p.child().__class__.__name__
+            size = p.get_size()
+            src = False
+            if protocol == 'IP' or protocol == 'UDP':
+                src = p.child().get_ip_src()
+                dest = p.child().get_ip_dst()
+            elif protocol == 'IP6':
+                src = p.child().get_source_address()
+                dest = p.child().get_destination_address()
+                print "IP6", src, dest
+                src = False
+            if src:
+                if src[0:2] == '10':
+                    col = ip_to_rgb(src)
+                    v = SPEED
+                    i = 0
+                else:
+                    col = ip_to_rgb(dest)
+                    v = -SPEED
+                    i = 52
+                l = size_to_length(size)
+                gradient = make_pulse(col, l)
+                print gradient
+                self.queue.put(pulse.Pulse(i, v, gradient))
+                print protocol, src, " -> ", dest, "Size ", size
+        except Exception as e:
             print "Decoding failed"
             print e
             return
