@@ -54,7 +54,6 @@ b2r = mkgradient(0, 0, 1, 1, 0, 0, 50)
 
 pattern = chrimbo
 
-print pattern
 #print y2b
 #print b2r
 
@@ -75,14 +74,15 @@ class Chaserapp(threading.Thread):
                 ( r, g, b ) = pattern[k]
                 self.holiday.setglobe(i, r, g, b)
             self.tick += 1
-            self.holiday.render()       # Send the colours out
-            time.sleep(.3)       # And finally, wait.
+            self.holiday.render()  
+            time.sleep(.3)       
 
 
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         addr = sys.argv[1]          # Pass IP address of Holiday on command line
+        cli = sys.argv[2:]
     else:
         sys.exit(1)                 # If not there, fail
 
