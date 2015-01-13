@@ -15,6 +15,7 @@ from holidaysecretapi import HolidaySecretAPI
 
 HOLIDAY_LENGTH = 50
 THRESHHOLD = 10
+WAIT_T = 0.01
 
 class Pulse:
     """
@@ -114,12 +115,17 @@ class Pulser(Thread):
                 p = self.queue.get()
                 self.pulses.append(p)
 
-            time.sleep(.05)       
-
+            time.sleep(WAIT_T)
 
 def random_colour(v):
     h = random.uniform(0, 1)
     return colorsys.hsv_to_rgb(h, 1, v)
+
+def make_gradient(v, l):
+    col = random_colour(v)
+    grad = [float(g)/l for g in range(l, 0, -1)]
+    (r, g, b) = col
+    return [ ( r * gr, g * gr, b * gr ) for gr in grad ]
 
 
 
@@ -138,14 +144,14 @@ if __name__ == '__main__':
     while True:
         try:
             time.sleep(1)
-            c = random_colour(1)
             l = random.randint(1, 6)
+            grad = make_gradient(1, l)
             i = 0
-            v = random.uniform(0.01, 3.0)
+            v = random.uniform(0.1, 3.0)
             if random.randint(0, 1):
                 i = 52
                 v = -v
-            p = Pulse(i, v, [c] * l)
+            p = Pulse(i, v, grad)
             q.put(p)
         except KeyboardInterrupt:
             pulser.terminate = True

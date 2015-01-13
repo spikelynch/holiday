@@ -20,8 +20,8 @@ import Queue
 from holidaysecretapi import HolidaySecretAPI 
 
 DEVICE_COLOURS = {
-    '2' : 180,
-    '3' : 46,
+    '2' : 46,
+    '3' : 180,
     '4' : 270,
     '5' : 161,
     '6' : 270,
@@ -32,19 +32,30 @@ DEVICE_COLOURS = {
     '11' : 27
 }
 
-SPEED = 4
+SPEED = .5
 SIZE = 3
-VALUE = .4
+VALUE = .3
 
 
 
-def ip_to_rgb(ip):
+def local_ip_to_rgb(ip):
     ipa = ip.split('.')
     if ipa:
         last = ipa.pop()
         if last in DEVICE_COLOURS:
             return colorsys.hsv_to_rgb(DEVICE_COLOURS[last] / 360.0, 1, VALUE)
     return colorsys.hsv_to_rgb(1, 0, VALUE)
+
+def ip_to_rgb(ip):
+     ipa = ip.split('.')
+     if len(ipa) > 2:
+         r = int(float(ipa[0]) * 0.25)
+         g = int(float(ipa[1]) * 0.25)
+         b = int(float(ipa[2]) * 0.25)
+         return (r, g, b)
+     else:
+         colorsys.hsv_to_rgb(1, 0, VALUE)
+
 
 def size_to_length(s):
     hex = "%x" % s
@@ -99,7 +110,7 @@ class DecoderThread(Thread):
                 src = False
             if src:
                 if src[0:2] == '10':
-                    col = ip_to_rgb(src)
+                    col = local_ip_to_rgb(src)
                     v = SPEED
                     i = 0
                 else:
@@ -108,7 +119,7 @@ class DecoderThread(Thread):
                     i = 52
                 l = size_to_length(size)
                 gradient = make_pulse(col, l)
-                print gradient
+                #print gradient
                 self.queue.put(pulse.Pulse(i, v, gradient))
                 print protocol, src, " -> ", dest, "Size ", size
         except Exception as e:
