@@ -15,7 +15,7 @@ from holidaysecretapi import HolidaySecretAPI
 
 HOLIDAY_LENGTH = 50
 THRESHHOLD = 10
-WAIT_T = 0.01
+WAIT_T = 0.05
 
 class Pulse:
     """
@@ -81,9 +81,10 @@ class Pulser(Thread):
     p.run()
 
     """
-    def __init__(self, ip, queue):
+    def __init__(self, ip, queue, wait):
         self.queue = queue
         self.ip = ip
+        self.wait = wait
         Thread.__init__(self)
 
 
@@ -115,7 +116,7 @@ class Pulser(Thread):
                 p = self.queue.get()
                 self.pulses.append(p)
 
-            time.sleep(WAIT_T)
+            time.sleep(self.wait)
 
 def random_colour(v):
     h = random.uniform(0, 1)
@@ -138,7 +139,7 @@ if __name__ == '__main__':
 
     q = Queue()
     
-    pulser = Pulser(ip, q)
+    pulser = Pulser(ip, q, WAIT_T)
     pulser.start()
 
     while True:

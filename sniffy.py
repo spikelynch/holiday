@@ -20,22 +20,25 @@ import Queue
 from holidaysecretapi import HolidaySecretAPI 
 
 DEVICE_COLOURS = {
-    '2' : 46,
-    '3' : 180,
-    '4' : 270,
-    '5' : 161,
-    '6' : 270,
-    '7' : 297,
-    '8' : 23,
-    '9' : 111,
-    '10' : 0,
+    '2' : 46,               # yellow
+    '3' : 180,              # cyan
+    '4' : 270,              # purple
+    '5' : 161,              # mint
+    '6' : 270,              # purple
+    '7' : 297,              # magenta
+    '8' : 23,               # orange
+    '9' : 111,              # green
+    '10' : 0,               # red
     '11' : 27
 }
 
+RETURN_SAME = False
+
 SPEED = .5
 SIZE = 3
-VALUE = .3
+VALUE = .1
 
+WAIT_T = .02
 
 
 def local_ip_to_rgb(ip):
@@ -109,19 +112,23 @@ class DecoderThread(Thread):
                 print "IP6", src, dest
                 src = False
             if src:
+                l = size_to_length(size)
                 if src[0:2] == '10':
                     col = local_ip_to_rgb(src)
-                    v = SPEED
+                    #col = ip_to_rgb(dest)
+                    v = SPEED / l
                     i = 0
                 else:
-                    col = ip_to_rgb(dest)
-                    v = -SPEED
-                    i = 52
-                l = size_to_length(size)
+                    if RETURN_SAME:
+                        col = local_ip_to_rgb(src)
+                    else:
+                        col = ip_to_rgb(src)
+                    v = -SPEED / l
+                    i = -52
                 gradient = make_pulse(col, l)
                 #print gradient
                 self.queue.put(pulse.Pulse(i, v, gradient))
-                print protocol, src, " -> ", dest, "Size ", size
+                #print protocol, src, " -> ", dest, "Size ", size
         except Exception as e:
             print "Decoding failed"
             print e
@@ -167,7 +174,7 @@ def main(ip, filter):
     q = Queue.Queue()
     
     # Start the holiday visualiser
-    pulses = pulse.Pulser(ip, q)
+    pulses = pulse.Pulser(ip, q, WAIT_T)
     pulses.start()
 
     # Start sniffing thread and finish main thread.
