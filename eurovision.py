@@ -10,28 +10,52 @@ __license__ = 'MIT'
 
 import sys, time, threading
 from holidaysecretapi import HolidaySecretAPI 
+import flags
 
 
+
+class Euroapp(threading.Thread):
+
+    def run(self):
+        """Go"""
+        global addr
+        self.terminate = False
+        self.holiday = HolidaySecretAPI(addr=addr)
+        self.tick = 0
+        nations = flags.FLAGS.keys()
+        nations.sort()
+        while True:
+            if self.terminate:
+                return
+            nation = nations[self.tick]
+            colours = flags.FLAGS[nation]
+            print nation
+            for i in range(self.holiday.NUM_GLOBES):
+                ( r, b, g ) = colours[i]
+                self.holiday.setglobe(i, r, g, b)
+            self.tick += 1
+            if self.tick == len(nations):
+                self.tick = 0
+            self.holiday.render()  
+            time.sleep(1)       
 
 
 
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 2:
+    if len(sys.argv) > 1:
         addr = sys.argv[1]          # Pass IP address of Holiday on command line
-        country = sys.argv[2]
     else:
         sys.exit(1)                 # If not there, fail
 
     holiday = HolidaySecretAPI(addr=addr)
 
-    if not (country in FLAGS):
-        print "Country not found"
-        sys.exit(1)
-    
-    for i in range(holiday.NUM_GLOBES):
-        ( r, b, g ) = FLAGS[country][i]
-        holiday.setglobe(i, r, g, b)
-        print "set globe ", i, r, g, b
-        holiday.render()
+    app = Euroapp()               # Instance thread & start it
+    app.start()
+    while True:
+        try:
+            time.sleep(0.1)
+        except KeyboardInterrupt:
+            app.terminate = True
+            sys.exit(0)
