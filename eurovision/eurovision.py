@@ -13,14 +13,14 @@ from holidaysecretapi import HolidaySecretAPI
 import flags
 
 
-def show_flag(nation):
+def show_flag(ip, nation):
     if nation in flags.FLAGS:
-        holiday = HolidaySecretAPI(addr=addr)
+        holiday = HolidaySecretAPI(addr=ip)
         colours = flags.FLAGS[nation]
         print nation
         for i in range(holiday.NUM_GLOBES):
             ( r, b, g ) = colours[i]
-        holiday.setglobe(i, r, g, b)
+            holiday.setglobe(i, r, g, b)
         holiday.render()
     else:
         print "unknown nation " + nation
@@ -34,6 +34,11 @@ if __name__ == '__main__':
     else:
         sys.exit(1)                 # If not there, fail
 
+    if len(sys.argv) > 2:
+        nation = sys.argv[2]
+    else:
+        nation = 'france'
+
     while True:
-        show_flag('france')
+        show_flag(addr, nation)
         time.sleep(1)

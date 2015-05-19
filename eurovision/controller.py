@@ -5,8 +5,9 @@
 import asyncore
 import socket
 import select
+import eurovision
 
-
+HOLIDAY_IP = '10.1.1.4'
 
 
 class Client(asyncore.dispatcher_with_send):
@@ -34,6 +35,7 @@ class Client(asyncore.dispatcher_with_send):
 
     def handle_command(self, line):
         print 'Received command:', line
+        eurovision.show_flag(HOLIDAY_IP, line)
 
 
 class Server(asyncore.dispatcher):
