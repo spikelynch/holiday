@@ -8,37 +8,22 @@ __author__ = 'Mike Lynch'
 __version__ = '1.0'
 __license__ = 'MIT'
 
-import sys, time, threading
+import sys, time
 from holidaysecretapi import HolidaySecretAPI 
 import flags
 
 
-
-class Euroapp(threading.Thread):
-
-    def run(self):
-        """Go"""
-        global addr
-        self.terminate = False
-        self.holiday = HolidaySecretAPI(addr=addr)
-        self.tick = 0
-        nations = flags.FLAGS.keys()
-        nations.sort()
-        while True:
-            if self.terminate:
-                return
-            nation = nations[self.tick]
-            colours = flags.FLAGS[nation]
-            print nation
-            for i in range(self.holiday.NUM_GLOBES):
-                ( r, b, g ) = colours[i]
-                self.holiday.setglobe(i, r, g, b)
-            self.tick += 1
-            if self.tick == len(nations):
-                self.tick = 0
-            self.holiday.render()  
-            time.sleep(delay)       
-
+def show_flag(nation):
+    if nation in flags.FLAGS:
+        holiday = HolidaySecretAPI(addr=addr)
+        colours = flags.FLAGS[nation]
+        print nation
+        for i in range(holiday.NUM_GLOBES):
+            ( r, b, g ) = colours[i]
+        holiday.setglobe(i, r, g, b)
+        holiday.render()
+    else:
+        print "unknown nation " + nation
 
 
 
@@ -49,21 +34,6 @@ if __name__ == '__main__':
     else:
         sys.exit(1)                 # If not there, fail
 
-    delay = 1
-    if len(sys.argv) > 2:
-        try:
-            delay = float(sys.argv[2])
-        except ValueError:
-            print "Delay must be numeric"
-            sys.exit(1)
-            
-    holiday = HolidaySecretAPI(addr=addr)
-
-    app = Euroapp()               # Instance thread & start it
-    app.start()
     while True:
-        try:
-            time.sleep(0.1)
-        except KeyboardInterrupt:
-            app.terminate = True
-            sys.exit(0)
+        show_flag('france')
+        time.sleep(1)
