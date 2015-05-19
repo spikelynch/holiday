@@ -37,7 +37,7 @@ class Euroapp(threading.Thread):
             if self.tick == len(nations):
                 self.tick = 0
             self.holiday.render()  
-            time.sleep(1)       
+            time.sleep(delay)       
 
 
 
@@ -49,6 +49,14 @@ if __name__ == '__main__':
     else:
         sys.exit(1)                 # If not there, fail
 
+    delay = 1
+    if len(sys.argv) > 2:
+        try:
+            delay = float(sys.argv[2])
+        except ValueError:
+            print "Delay must be numeric"
+            sys.exit(1)
+            
     holiday = HolidaySecretAPI(addr=addr)
 
     app = Euroapp()               # Instance thread & start it
