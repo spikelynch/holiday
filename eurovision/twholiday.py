@@ -5,30 +5,44 @@
 
 from twisted.internet.protocol import Factory, Protocol
 from twisted.internet.endpoints import TCP4ServerEndpoint
+from twisted.internet.task import LoopingCall, deferLater
 from twisted.internet import reactor
 
-class QOTD(Protocol):
+import eurovision
+import flags
 
+
+state = ""
+
+HOLIDAY_IP = "10.1.1.4"
+
+class HolidayServer(Protocol):
+
+    def __init__(self):
+        self.state = ""
+    
     def connectionMade(self):
         # self.factory was set by the factory's default buildProtocol:
         print "Connected"
-        self.transport.write(self.factory.quote + '\r\n')
+        self.transport.write("connected\r\n")
 
     def dataReceived(self, data):
-        print "Data received" + data
-        self.transport.write(data)
+        print "Data received " + data
+        
+        nation = data[:-1]
+        eurovision.show_flag(HOLIDAY_IP, nation)
+
         
     def connectionLost(self, reason):
-        print "Lost connection"
+        print "Goodbye"
 
-class QOTDFactory(Factory):
+class HolidayServerFactory(Factory):
+    protocol = HolidayServer
 
-    # This will be used by the default buildProtocol to create new protocols:
-    protocol = QOTD
 
-    def __init__(self, quote=None):
-        self.quote = quote or 'An apple a day keeps the doctor away'
+
+        
 
 endpoint = TCP4ServerEndpoint(reactor, 8007)
-endpoint.listen(QOTDFactory("configurable quote"))
+endpoint.listen(HolidayServerFactory())
 reactor.run()

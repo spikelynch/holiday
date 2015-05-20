@@ -27,7 +27,6 @@ def show_flag(ip, nation):
 
 
 
-
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         addr = sys.argv[1]          # Pass IP address of Holiday on command line
