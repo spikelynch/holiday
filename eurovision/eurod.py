@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Holiday server using Twisted instead of asyncore
+# Holiday server using Twisted 
 
 from twisted.application import internet, service
 from twisted.internet.protocol import ServerFactory, Protocol
