@@ -50,7 +50,7 @@ def tick_lights(service):
         
 port = 8007
 holiday_ip = '10.1.1.4'
-interval = 1
+interval = .2
 
 lights = EuroLights(holiday_ip)
 
