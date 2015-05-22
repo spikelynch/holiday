@@ -36,7 +36,7 @@ class EuroLights(Lights):
         if self.f == len(self.frames):
             self.f = 0
 
-    def _off(self):
+    def off(self):
         for i in range(self.holiday.NUM_GLOBES):
             self.holiday.setglobe(i, 0, 0, 0)
         self.holiday.render()

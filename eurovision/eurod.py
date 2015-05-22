@@ -19,12 +19,20 @@ class HolidayProtocol(Protocol):
     
     def dataReceived(self, data):
         nation = data[:-1]
-        if self.factory.service.lights.send(nation):
+        log.msg("Data: " + nation)
+        if nation == 'toggle':
+            if self.factory.service.state:
+                self.factory.service.lights.off()
+                self.factory.service.state = False
+                log.msg("Switched off")
+            else:
+                self.factory.service.state = True
+                log.msg("Switched on")
+        elif self.factory.service.lights.send(nation):
+            self.factory.service.state = True
             log.msg("Switched: " + nation)
-            #self.transport.write("1\r\n")
         else:
             log.msg("Bad nation: " + nation + "not known")
-            #self.transport.write("0\r\n")
 
     def connectionLost(self, reason):
         log.msg("Disconnected")
@@ -40,6 +48,7 @@ class HolidayService(service.Service):
 
     def __init__(self, lights):
         self.lights = lights
+        self.state = False
 
     def startService(self):
         service.Service.startService(self)
@@ -47,7 +56,8 @@ class HolidayService(service.Service):
 
 
 def tick_lights(service):
-    service.lights.tick()
+    if service.state:
+        service.lights.tick()
 
 
         
