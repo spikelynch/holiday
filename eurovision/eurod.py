@@ -19,7 +19,12 @@ class HolidayProtocol(Protocol):
     
     def dataReceived(self, data):
         nation = data[:-1]
-        self.factory.service.lights.send(nation)
+        if self.factory.service.lights.send(nation):
+            log.msg("Switched: " + nation)
+            #self.transport.write("1\r\n")
+        else:
+            log.msg("Bad nation: " + nation + "not known")
+            #self.transport.write("0\r\n")
 
     def connectionLost(self, reason):
         log.msg("Disconnected")

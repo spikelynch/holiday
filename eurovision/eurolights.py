@@ -20,6 +20,13 @@ class EuroLights(Lights):
             self.nation = nation
             self.frames = flags.FRAMES[self.nation]
             self.f = 0
+            self.cycle = False
+            return True
+        elif nation == 'cycle':
+            self.nation = None
+            self.cycle = True
+        else:
+            return False
             
     def tick(self):
         for i in range(self.holiday.NUM_GLOBES):
