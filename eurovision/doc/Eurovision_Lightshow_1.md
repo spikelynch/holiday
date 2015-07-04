@@ -62,7 +62,7 @@ The other thing is that SVG file size gives us a way to order national flags in 
 | Nation         | File size     | Flag         |
 | ---------      | -------------:|--------------|
 | Serbia.svg     | 271KB         |![Serbia](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Serbia.png)|
-| San_Marino.svg | 271KB         |![San Marino](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/SanMarino.png)|
+| San_Marino.svg | 271KB         |![San Marino](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/San_Marino.png)|
 | Spain.svg      | 235KB         |![Spain](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Spain.png)|
 | Montenegro.svg | 89KB          |![Montenegro](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Montenegro.png)|
 | Moldova.svg    | 30KB       |![Moldova](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Moldova.png)|
