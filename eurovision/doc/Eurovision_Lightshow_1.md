@@ -31,7 +31,16 @@ files, and then another script using ImageMagick, a venerable set of
 image manipulation tools, to render the SVGs at the right size and
 plonk them on an Australian flag in place of the Union Jack.
 
-[ scripts ]
+    for svg in "$@"
+    do
+        bn=$(basename "$svg")
+        file="${bn%.*}"
+        echo "$svg -> $file"
+        convert -resize 600x300! "$bn" "$file.png"
+        composite "$file.png" Ausback.png "au_$file.png"
+    done
+
+    montage -tile 5x8 -geometry 100x50+8+8 au_Flag_of_*.png final.png
 
 
 ## Flags Are Weird: A Digression
@@ -54,7 +63,7 @@ the librsvg library fixed this:
 
 The other thing is that SVG file size gives us a way to order national flags in order of Fanciness:
 
-    [ illustration ]
+![Screenshot of a directory listing of SVG files](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/Fanciness.png "Fanciness")
 
 ## The Worst Display In The World
 
