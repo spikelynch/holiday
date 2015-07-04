@@ -61,21 +61,21 @@ The other thing is that SVG file size gives us a way to order national flags in 
 
 | Nation         | File size     | Flag         |
 | ---------      | -------------:|--------------|
-| Serbia.svg     | 271KB         |![Serbia](https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Flag_of_Serbia.svg/218px-Flag_of_Serbia.svg.png)|
-| San_Marino.svg | 271KB         |
-| Spain.svg      | 235KB         |
-| Montenegro.svg | 89KB          |
-| Moldova.svg    | 30KB       |
-| Malta.svg      | 23KB |
-| Cyprus.svg     | 16KB |
-| Portugal.svg   | 13KB |
-| Albania.svg    | 6KB |
-| Australia.svg  | 2KB |
-| Slovenia.svg   | 2KB |
-| Israel.svg     | 2KB |
-| Belarus.svg    | 1KB |
-| Georgia.svg    | 970B |
-| Azrbaijan.svg  | 722B |
+| Serbia.svg     | 271KB         |![Serbia](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Serbia.png)|
+| San_Marino.svg | 271KB         |![San Marino](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/SanMarino.png)|
+| Spain.svg      | 235KB         |![Spain](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Spain.png)|
+| Montenegro.svg | 89KB          |![Montenegro](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Montenegro.png)|
+| Moldova.svg    | 30KB       |![Moldova](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Moldova.png)|
+| Malta.svg      | 23KB |![Malta](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Malta.png)|
+| Cyprus.svg     | 16KB |![Cyprus](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Cyprus.png)|
+| Portugal.svg   | 13KB |![Portugal](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Portugal.png)|
+| Albania.svg    | 6KB |![Albania](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Albania.png)|
+| Australia.svg  | 2KB |![Australia](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Australia.png)|
+| Slovenia.svg   | 2KB |![Slovenia](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Slovenia.png)|
+| Israel.svg     | 2KB |![Israel](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Israel.png)|
+| Belarus.svg    | 1KB |![Belarus](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Belarus.png)|
+| Georgia.svg    | 970B |![Georgia](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Georgia.png)|
+| Azerbaijan.svg  | 722B |![Azerbaijan](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/flags/Azerbaijan.png)|
 
 This biases towards countries with scrolls and shields and two-headed
 eagles and what-not, not to mention other nations' entire flags, on
