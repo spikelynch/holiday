@@ -59,10 +59,27 @@ the librsvg library fixed this:
 
 The other thing is that SVG file size gives us a way to order national flags in order of computational complexity, or Fanciness:
 
-![Screenshot of a directory listing of SVG files](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/Fanciness.png "Fanciness")
+|Nation   |File size     |
+|---------+-------------:|
+|Serbia.svg|271KB        |
+|San_Marino.svg|271KB    |
+|Spain.svg|235KB|
+|Montenegro.svg|89KB|
+|Moldova.svg|30KB|
+|Malta.svg|23KB|
+|Cyprus.svg|16KB|
+|Portugal.svg|13KB|
+|Albania.svg|6KB|
+|Australia.svg|2KB|
+|Slovenia.svg|2KB|
+|Israel.svg|2KB|
+|Belarus.svg|1KB|
+|Georgia.svg|970B|
+|Azrbaijan.svg|722B|
 
 This biases towards countries with scrolls and shields and two-headed
-eagles and what-not on their flags.
+eagles and what-not, not to mention other nations' entire flags, on
+their flags.
 
 ## The Worst Display In The World
 
