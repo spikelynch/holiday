@@ -47,7 +47,7 @@ plonk them on an Australian flag in place of the Union Jack.
 
 What's the aspect ratio of a flag? 2:1 seemed like a good guess, I
 thought, unless it's 4:3, like an old movie screen? Or... 13:15?  Go
-home, Belgian national flag, [you're drunk.](https://en.wikipedia.org/wiki/List_of_countries_by_proportions_of_national_flags)  Because the Australian flag is 2:1 I just forced everything else to that ratio
+home, Belgian national flag, [you're drunk.](https://en.wikipedia.org/wiki/List_of_countries_by_proportions_of_national_flags)  As the Australian flag is 2:1 I just forced everything else to that ratio.
 
 Two other things are worth noting about this part of the process:
 ImageMagick kept crashing when it got to Portugal.  This turns out to
@@ -59,23 +59,23 @@ the librsvg library fixed this:
 
 The other thing is that SVG file size gives us a way to order national flags in order of computational complexity, or Fanciness:
 
-|Nation   |File size     |
-|---------+-------------:|
-|Serbia.svg|271KB        |
-|San_Marino.svg|271KB    |
-|Spain.svg|235KB|
-|Montenegro.svg|89KB|
-|Moldova.svg|30KB|
-|Malta.svg|23KB|
-|Cyprus.svg|16KB|
-|Portugal.svg|13KB|
-|Albania.svg|6KB|
-|Australia.svg|2KB|
-|Slovenia.svg|2KB|
-|Israel.svg|2KB|
-|Belarus.svg|1KB|
-|Georgia.svg|970B|
-|Azrbaijan.svg|722B|
+| Nation         | File size     |
+| ---------      | -------------:|
+| Serbia.svg     | 271KB         |
+| San_Marino.svg | 271KB         |
+| Spain.svg      | 235KB         |
+| Montenegro.svg | 89KB          |
+| Moldova.svg    | 30KB       |
+| Malta.svg      | 23KB |
+| Cyprus.svg     | 16KB |
+| Portugal.svg   | 13KB |
+| Albania.svg    | 6KB |
+| Australia.svg  | 2KB |
+| Slovenia.svg   | 2KB |
+| Israel.svg     | 2KB |
+| Belarus.svg    | 1KB |
+| Georgia.svg    | 970B |
+| Azrbaijan.svg  | 722B |
 
 This biases towards countries with scrolls and shields and two-headed
 eagles and what-not, not to mention other nations' entire flags, on
