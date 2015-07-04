@@ -1,7 +1,7 @@
 Eurovision Lightshow 1
 ======================
 
-This is the first of three blog posts detailing an incredibly daggy
+This is the first of three posts detailing an incredibly daggy
 project: setting up a string of programmable LED lights as a lightshow
 for my Eurovision housewarming party, using a Raspberry Pi as the
 controller.  The most generally useful part of it is the second post,
@@ -20,14 +20,12 @@ moderately well, which I selected because the example code used it.
 
 The first idea I had for the Eurovision lights was a simple chaser
 pattern in the national colours of each of the entrants. I already had
-RGB values for these from making the image below for the party invite:
+RGB values for these from making the party invitation, which was a grid of forty Australian flags with the national flag of each competing nation in the place of the Union Jack.
 
-![Australian flags of all nations](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/AusEuro.png "Australia")
-
-Wikipedia has [SVG files for national
-flags,](https://en.wikipedia.org/wiki/Flag_of_Australia#/media/File:Flag_of_Australia.svg).
-To make the above image, I'd written a script to download the 40 SVG
-files, and then another script using ImageMagick, a venerable set of
+Wikipedia has [SVG files for all of the national
+flags](https://en.wikipedia.org/wiki/Flag_of_Australia#/media/File:Flag_of_Australia.svg).
+To make the invite, I'd written a script to download the 40 SVG
+files, and then wrote a shell script which uses ImageMagick, a venerable set of
 image manipulation tools, to render the SVGs at the right size and
 plonk them on an Australian flag in place of the Union Jack.
 
@@ -42,16 +40,14 @@ plonk them on an Australian flag in place of the Union Jack.
 
     montage -tile 5x8 -geometry 100x50+8+8 au_Flag_of_*.png final.png
 
+![Australian flags of all nations](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/AusEuro.png "Australia")
+
 
 ## Flags Are Weird: A Digression
 
 What's the aspect ratio of a flag? 2:1 seemed like a good guess, I
 thought, unless it's 4:3, like an old movie screen? Or... 13:15?  Go
-home, Belgian national flag, you're drunk:
-
-https://en.wikipedia.org/wiki/List_of_countries_by_proportions_of_national_flags
-
-I ended up forcing everything to be 2:1.
+home, Belgian national flag, [you're drunk.](https://en.wikipedia.org/wiki/List_of_countries_by_proportions_of_national_flags)  Because the Australian flag is 2:1 I just forced everything else to that ratio
 
 Two other things are worth noting about this part of the process:
 ImageMagick kept crashing when it got to Portugal.  This turns out to
@@ -61,18 +57,20 @@ the librsvg library fixed this:
 
     brew install ImageMagick --with-librsvg librsvg
 
-The other thing is that SVG file size gives us a way to order national flags in order of Fanciness:
+The other thing is that SVG file size gives us a way to order national flags in order of computational complexity, or Fanciness:
 
 ![Screenshot of a directory listing of SVG files](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/Fanciness.png "Fanciness")
 
 ## The Worst Display In The World
 
-I revisited the SVG files with the idea of stripping RGB values out of
-them for my chaser lights, but it struck me that I could try rendering
-not just the colours but the flag design, if I arrangeed the Holiday
-to form a 10x5 grid, AKA the worst display in the world:
+I revisited the SVG flag files with the idea of stripping RGB values
+out of them for my chaser lights, but it struck me that I could try
+rendering not just the colours but the flag design, if I arranged the
+Holiday to form a 10x5 grid, AKA the worst display in the world. I did
+this by the incredibly hi-tech method of sticky-taping it to an
+unfolded cardboard box:
 
-[ photo of the unlit grid ]
+![Unlit Holiday grid](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/HolidayGrid.jpg "It's a nappy box, in case you were wondering")
 
 For this to work, I'd need to get 10x5 renderings of the SVG files,
 and adapt my existing Python scripts to render the colours to the
@@ -84,13 +82,13 @@ values and thus easy to reprocess into other formats.
 
 Once I had the bitmaps, I made another little Perl script to convert
 them into Python code, and adapted one of my existing Holiday scripts
-to render them to the lights.  The problem was: with the exception of
-tricolors, almost all national flags look like unrecognisable blurs at
-10x5:
+to render them to the lights.  The problem was that with the exception
+of tricolors, almost all national flags look like unrecognisable blurs
+at 10x5.
 
-![Chunky pixels](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/PixelFlag.png "Chunky!")
+![Chunky pixels](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/PixelFlag.png "Chunky")
 
-[ lit-up Holiday]
+![Lit-up, inadequate Australian flag](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/Australia.jpg "Extra chunky")
 
 Part two will be about how I animated the flag patterns to give them a
 bit of life and also make them recognisable, and how I built a
