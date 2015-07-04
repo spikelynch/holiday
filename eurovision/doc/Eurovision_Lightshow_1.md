@@ -61,6 +61,9 @@ The other thing is that SVG file size gives us a way to order national flags in 
 
 ![Screenshot of a directory listing of SVG files](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/Fanciness.png "Fanciness")
 
+This biases towards countries with scrolls and shields and two-headed
+eagles and what-not on their flags.
+
 ## The Worst Display In The World
 
 I revisited the SVG flag files with the idea of stripping RGB values
