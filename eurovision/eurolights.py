@@ -9,6 +9,9 @@ import sys, time
 import flags
 from lights import Lights
 
+ANIMATE = True
+STILLFRAME = 5
+
 class EuroLights(Lights):
 
     def __init__(self, ip):
@@ -20,7 +23,10 @@ class EuroLights(Lights):
         if nation in flags.FRAMES:
             self.nation = nation
             self.frames = flags.FRAMES[self.nation]
-            self.f = 0
+            if ANIMATE:
+                self.f = 0
+            else:
+                self.f = STILLFRAME
             self.cycle = False
             return True
         elif nation == 'cycle':
@@ -33,6 +39,8 @@ class EuroLights(Lights):
         for i in range(self.holiday.NUM_GLOBES):
             self.holiday.setglobe(i, *(self.frames[self.f][i]))
         self.holiday.render()
+        if not ANIMATE:
+            return
         self.f += 1
         if self.f == len(self.frames):
             self.f = 0
