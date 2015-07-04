@@ -1,5 +1,5 @@
-Eurovision Flags
-================
+Eurovision Lightshow 1
+======================
 
 This is the first of three blog posts detailing an incredibly daggy
 project: setting up a string of programmable LED lights as a lightshow
@@ -9,7 +9,7 @@ which is about how easy it is to whip up a well-behaved customised
 server for a Unix system using the Python event-based programming
 framework Twisted.
 
-## Colours
+## National Colours
 
 I got one of the last sets of Holiday lights, a really nice string of
 50 programmable LEDs produced by an Australian startup.  Holidays have
@@ -22,7 +22,7 @@ The first idea I had for the Eurovision lights was a simple chaser
 pattern in the national colours of each of the entrants. I already had
 RGB values for these from making the image below for the party invite:
 
-[ Ausflags ]
+![Australian flags of all nations](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/AusEuro.png "Australia")
 
 Wikipedia has [SVG files for national
 flags,](https://en.wikipedia.org/wiki/Flag_of_Australia#/media/File:Flag_of_Australia.svg).
@@ -79,7 +79,7 @@ to render them to the lights.  The problem was: with the exception of
 tricolors, almost all national flags look like unrecognisable blurs at
 10x5:
 
-[pixelled-up flag]
+![Chunky pixels](https://raw.githubusercontent.com/spikelynch/holiday/master/eurovision/doc/PixelFlag.png "Chunky!")
 
 [ lit-up Holiday]
 
