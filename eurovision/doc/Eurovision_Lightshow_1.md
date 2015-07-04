@@ -59,9 +59,9 @@ the librsvg library fixed this:
 
 The other thing is that SVG file size gives us a way to order national flags in order of computational complexity, or Fanciness:
 
-| Nation         | File size     |
-| ---------      | -------------:|
-| Serbia.svg     | 271KB         |
+| Nation         | File size     | Flag         |
+| ---------      | -------------:|--------------|
+| Serbia.svg     | 271KB         |![Serbia](https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Flag_of_Serbia.svg/218px-Flag_of_Serbia.svg.png)|
 | San_Marino.svg | 271KB         |
 | Spain.svg      | 235KB         |
 | Montenegro.svg | 89KB          |
