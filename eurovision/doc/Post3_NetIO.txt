@@ -1,4 +1,0 @@
-Remote Control with NetIO
-=========================
-
-Using the NetIO app and website to build a remote
