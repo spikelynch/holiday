@@ -12,10 +12,11 @@ import sys, time, threading, random, math, colorsys
 
 from holidaysecretapi import HolidaySecretAPI 
 
-from cellular import CellularAutomaton, rule30, rule90, rule110, basic_mod
+from cellular import CellularAutomaton
+import cellular
 import gradient
 
-SLEEP = .1
+SLEEP = .02
 
 
 
@@ -61,9 +62,13 @@ if __name__ == '__main__':
         sys.exit(1)                 # If not there, fail
 
     app = CARunner()
-    gradient = gradient.hsvgrad(20, 1, 0, 1, 1, 0, 0)
-    print gradient
-    ca = CellularAutomaton(gradient, basic_mod)
+    g = gradient.hsvgrad(80, 0, 1, .5, .25, 1, 1) # gnarly purple/green
+    #gradient = gradient.hsvgrad(18, 0, .2, .2, 1, 1, 1)
+    #gradient = gradient.hsvgrad(67, .16, 1, 1, 0, 1, 0)
+    #g = gradient.hsvgrad(20, 0, 1, 1, .3333, 1, .666)
+    #g = g + gradient.hsvgrad(20, .3333, 1, .666, .666, 1, .333)
+    #g = g + gradient.hsvgrad(20, .666, 1, .333, 1, 1, 0)
+    ca = CellularAutomaton(g, cellular.excitable)
     app.setup(ca)
     app.start()
     
