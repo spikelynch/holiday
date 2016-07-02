@@ -62,12 +62,16 @@ if __name__ == '__main__':
         sys.exit(1)                 # If not there, fail
 
     app = CARunner()
-    g = gradient.hsvgrad(80, 0, 1, .5, .25, 1, 1) # gnarly purple/green
+    #g = gradient.hsvgrad(80, 0, 1, .5, .25, 1, 1) # gnarly purple/green
     #gradient = gradient.hsvgrad(18, 0, .2, .2, 1, 1, 1)
     #gradient = gradient.hsvgrad(67, .16, 1, 1, 0, 1, 0)
     #g = gradient.hsvgrad(20, 0, 1, 1, .3333, 1, .666)
     #g = g + gradient.hsvgrad(20, .3333, 1, .666, .666, 1, .333)
     #g = g + gradient.hsvgrad(20, .666, 1, .333, 1, 1, 0)
+    g = gradient.hsvgrad(10, 0.6666, .75, 0, 0.666, .75, .3)
+    g = g + gradient.hsvgrad(10, 0.666, .75, .3, .80, .75, .6)
+    g = g + gradient.hsvgrad(10, .8, .75, .6, .6666, 0, 1)
+    g = g + gradient.hsvgrad(5, .6666, 0, 1, .6666, .75, .3)
     ca = CellularAutomaton(g, cellular.excitable)
     app.setup(ca)
     app.start()
