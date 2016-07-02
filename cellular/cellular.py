@@ -58,3 +58,18 @@ def rule110(a, b, c):
 
 def basic_mod(a, b, c):
     return a + b + c
+
+
+def excitable(a, b, c):
+    """0 = refractory, 1 = rest, 2 + = excited"""
+    if b > 1:
+        return b + 1
+    if b == 0:
+        return 1
+    if b == 1:
+        if a > 1 or c > 1:
+            return 2
+        else:
+            return 1
+
+        
