@@ -14,6 +14,11 @@ For these to work, your Holiday needs to be on your local wifi, and its IP addre
 
 Basic colour-pattern chaser
 
+## cellular/carunner.py
+
+New-ish and badly documented and factored scripts for 1-D cellular automata.
+Run cellular/carunner.py 
+
 ## drops.py
 
 Flashes of colour
