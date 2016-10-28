@@ -20,10 +20,15 @@ RMULT = 2
 BMULT = 3
 GMULT = 5
 
-RV = 0.522
-BV = -.3
-GV = .735
+#RV = 0.522
+#BV = -.3
+#GV = .735
 
+# Fast
+
+RV = 1.7
+BV = -1.3
+GV = 1.1
 
 #RMULT = 2
 #BMULT = 3

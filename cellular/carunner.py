@@ -16,8 +16,8 @@ from cellular import CellularAutomaton
 import cellular
 import gradient
 
-SLEEP = .02
 
+SLEEP = .02
 
 
 
@@ -68,10 +68,16 @@ if __name__ == '__main__':
     #g = gradient.hsvgrad(20, 0, 1, 1, .3333, 1, .666)
     #g = g + gradient.hsvgrad(20, .3333, 1, .666, .666, 1, .333)
     #g = g + gradient.hsvgrad(20, .666, 1, .333, 1, 1, 0)
-    g = gradient.hsvgrad(10, 0.6666, .75, 0, 0.666, .75, .3)
-    g = g + gradient.hsvgrad(10, 0.666, .75, .3, .80, .75, .6)
-    g = g + gradient.hsvgrad(10, .8, .75, .6, .6666, 0, 1)
-    g = g + gradient.hsvgrad(5, .6666, 0, 1, .6666, .75, .3)
+
+    #g = gradient.hsvgrad(30, 0.6666, .75, 0, 0.666, .75, .3)
+    #g = g + gradient.hsvgrad(20, 0.666, .75, .3, .80, .75, .6)
+    #g = g + gradient.hsvgrad(20, .8, .75, .6, .6666, 0, 1)
+    #g = g + gradient.hsvgrad(15, .6666, 0, 1, .6666, .75, .3)
+    
+    g = gradient.hsvgrad(30, 0, 0, 0, 0, 1, 1)
+    g = g + gradient.hsvgrad(30, 0, 1, 1, .1, 1, 1)
+    g = g + gradient.hsvgrad(30, .1, 1, 1, 0, .3, 1)
+    g = g + gradient.hsvgrad(50, 0, .3, 1, 0, 0, 0)
     ca = CellularAutomaton(g, cellular.excitable)
     app.setup(ca)
     app.start()
